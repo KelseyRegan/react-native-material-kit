@@ -23,7 +23,7 @@ RCT_EXPORT_MODULE()
     return view;
 }
 
-RCT_EXPORT_VIEW_PROPERTY(inset, float)
-RCT_EXPORT_VIEW_PROPERTY(fillColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(inset, float)  // Insets of the tick
+RCT_EXPORT_VIEW_PROPERTY(fillColor, int)  // Background color of the tick
 
 @end

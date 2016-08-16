@@ -13,10 +13,10 @@
 
 @implementation TickView
 {
+    UIColor *_fillColor;
     UIBezierPath *tickPath;
 }
 
-@synthesize fillColor;
 @synthesize inset;
 
 - (instancetype)init {
@@ -45,7 +45,8 @@
 - (void)initDefaults
 {
     self.inset = 1;
-    self.fillColor = [UIColor indigo];
+    _fillColor = [UIColor indigo];
+    [self setOpaque:false];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -54,7 +55,7 @@
         [self updateTickPathWithRect:rect];
     }
 
-    [fillColor setFill];
+    [_fillColor setFill];
     [tickPath fill];
 
 }
@@ -68,17 +69,10 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFillColor:(UIColor *)color
+- (void)setFillColor:(int)color
 {
-    if (color) {
-        fillColor = color;
-        [self setNeedsDisplay];
-    }
-}
-
-- (UIColor*)fillColor
-{
-    return fillColor;
+    _fillColor = [UIColor colorWithHex:color];
+    [self setNeedsDisplay];
 }
 
 - (void)setInset:(float)anInset
@@ -102,13 +96,14 @@
     CGFloat top = CGRectGetMinY(rect);
     CGFloat bottom = CGRectGetMaxY(rect);
 
+    CGFloat extraBottomInset = 1;  // #117 Leaving 1px gap from bottom (2px will make the tick too thin)
     CGFloat width = right - left;
     CGFloat baseSize = width / 3;  // choose a box at the left bottom corner which defines the width of the tick
-    CGFloat tickBottomY = bottom - self.inset;
-    CGFloat tickWidth = (baseSize - self.inset) / M_SQRT2;
+    CGFloat tickBottomY = bottom - self.inset - extraBottomInset;
+    CGFloat tickWidth = (baseSize - self.inset - extraBottomInset) / M_SQRT2;
     CGFloat a = tickWidth / M_SQRT2;
     CGFloat x0 = left + self.inset;
-    CGFloat y0 = bottom - self.inset - (baseSize - self.inset);
+    CGFloat y0 = tickBottomY - (baseSize - self.inset);
 
     tickPath = [UIBezierPath bezierPathWithRect:rect];
     tickPath.usesEvenOddFillRule = YES;

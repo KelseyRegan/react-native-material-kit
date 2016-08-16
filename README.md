@@ -2,24 +2,32 @@
 [![react-native][rn-badge]][rn]
 [![MIT][license-badge]][license]
 [![bitHound Score][bithound-badge]][bithound]
+[![Gitter][gitter-badge]][gitter-rnmk]
+
 
 A set of UI components, in the purpose of introducing [Material Design][md] to apps built with [React Native][rn], quickly and painlessly.
 
 [npm-badge]: https://img.shields.io/npm/v/react-native-material-kit.svg
 [npm]: https://www.npmjs.com/package/react-native-material-kit
-[rn-badge]: https://img.shields.io/badge/react--native-v0.18.x-05A5D1.svg
+[rn-badge]: https://img.shields.io/badge/react--native-v0.27.x-05A5D1.svg
 [rn]: https://facebook.github.io/react-native
 [md]: http://www.google.com/design/spec/material-design/introduction.html
 [license-badge]: https://img.shields.io/dub/l/vibe-d.svg
 [license]: https://raw.githubusercontent.com/xinthink/react-native-material-kit/master/LICENSE.md
 [bithound-badge]: https://www.bithound.io/github/xinthink/react-native-material-kit/badges/score.svg
 [bithound]: https://www.bithound.io/github/xinthink/react-native-material-kit
+[gitter-badge]: https://img.shields.io/gitter/room/xinthink/react-native-material-kit.svg
+[gitter-rnmk]: https://gitter.im/xinthink/react-native-material-kit
 
 ## Getting Started
 
-First, `cd` to your RN project directory, and install RNMK through the command `npm i -S react-native-material-kit`.
+First, `cd` to your RN project directory, and install RNMK through [rnpm](https://github.com/rnpm/rnpm) . If you don't have rnpm, you can install RNMK from npm with the command `npm i -S react-native-material-kit` and link it manually (see below).
 
 ### iOS
+#### Using rnpm
+`rnpm install react-native-material-kit`
+
+#### Manually
 1. Add `node_modules/react-native-material-kit/iOS/RCTMaterialKit.xcodeproj` to your xcode project, usually under the `Libraries` group
 1. Add `libRCTMaterialKit.a` (from `Products` under `RCTMaterialKit.xcodeproj`) to build target's `Linked Frameworks and Libraries` list
 
@@ -43,6 +51,11 @@ end
 Now run `pod install`. This will create an Xcode workspace containing all necessary native files, including react-native-material-kit. From now on open `YourProject.xcworkspace` instead of `YourProject.xcodeproject` in Xcode. Because React Native's iOS code is now pulled in via CocoaPods, you also need to remove the `React`, `RCTImage`, etc. subprojects from your app's Xcode project, in case they were added previously.
 
 ### Android
+
+#### Using rnpm
+`rnpm install react-native-material-kit`
+
+#### Manually
 1. JDK 7+ is required
 1. Add the following snippet to your `android/settings.gradle`:
   ```gradle
@@ -58,16 +71,15 @@ Now run `pod install`. This will create an Xcode workspace containing all necess
   }
 
   ```
-1. Import `com.github.xinthink.rnmk.ReactMaterialKitPackage` and register it to the `ReactInstanceManager`, in your `MainActivity` (or equivalent):
+1. Import `com.github.xinthink.rnmk.ReactMaterialKitPackage` and register it in your `MainActivity` (or equivalent):
   ```java
-  mReactInstanceManager = ReactInstanceManager.builder()
-      .setApplication(getApplication())
-      ...
-      .addPackage(new MainReactPackage())
-      .addPackage(new ReactMaterialKitPackage())
-      ...
-      .build();
-
+  @Override
+  protected List<ReactPackage> getPackages() {
+      return Arrays.asList(
+              new MainReactPackage(),
+              new ReactMaterialKitPackage()
+      );
+  }
   ```
 
 Finally, you're good to go, feel free to require `react-native-material-kit` in your JS files.
@@ -79,6 +91,7 @@ Have fun! :metal:
 - Refer to the [Annotated Source][docs] as API docs
 - Source code of [Demo app][]
 - For contributors, please refer to [How to debug local RNMK module][debug-with-demo]
+- Chat about bugs/features on [Gitter][gitter-rnmk]
 
 [docs]: http://xinthink.github.io/react-native-material-kit/docs/index.html
 [Demo app]: https://github.com/xinthink/rnmk-demo
@@ -92,6 +105,7 @@ Have fun! :metal:
   - [Progress bar](#progress-bar)
   - [Spinner](#spinner)
 - [Sliders](#sliders)
+  - [Range Slider](#range-slider)
 - [Textfields](#text-fields)
 - [Toggles](#toggles)
   - [Checkbox](#checkbox)
@@ -115,7 +129,7 @@ const ColoredRaisedButton = MKButton.coloredButton()
   .build();
 
 ...
-<ColoredRaisedButton/>
+<ColoredRaisedButton />
 ```
 
 And you can definitely build customized buttons from scratch.
@@ -140,7 +154,7 @@ const CustomButton = new MKButton.Builder()
   .build();
 
 ...
-<CustomButton/>
+<CustomButton />
 ```
 
 the jsx equivalent:
@@ -182,20 +196,22 @@ the jsx equivalent:
 
 Apply [`Card Style`][cards-mdl] with only few styles !.
 ```jsx
-const MK = require('react-native-material-kit');
-const {
-  MKCardStyles
-} = MK;
+import {
+  getTheme,
+  ...
+} from 'react-native-material-kit';
 
-<View style={MKCardStyles.card}>
-  <Image source={{uri : base64Icon}} style={MKCardStyles.image}/>
-  <Text style={MKCardStyles.title}>Welcome</Text>
-  <Text style={MKCardStyles.content}>
+const theme = getTheme();
+
+<View style={theme.cardStyle}>
+  <Image source={{uri : base64Icon}} style={theme.cardImageStyle} />
+  <Text style={theme.cardTitleStyle}>Welcome</Text>
+  <Text style={theme.cardContentStyle}>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Mauris sagittis pellentesque lacus eleifend lacinia...
   </Text>
-  <View style={MKCardStyles.menu}>{menu}</View>
-  <Text style={MKCardStyles.action}>My Action</Text>
+  <View style={theme.cardMenuStyle}>{menu}</View>
+  <Text style={theme.cardActionStyle}>My Action</Text>
 </View>
 
 ```
@@ -216,7 +232,7 @@ const {
 <mdl.Progress
   style={styles.progress}
   progress={0.2}
-  />
+/>
 ```
 
 👉 [props reference][prog-props-doc] and [example code][progress-sample]
@@ -225,7 +241,7 @@ const {
 [![spinner-demo]][mdl-loading]
 
 ```jsx
-<mdl.Spinner/>
+<mdl.Spinner />
 ```
 
 👉 [props reference][spinner-props-doc] and [example code][progress-sample]
@@ -242,7 +258,7 @@ const {
 [![slider-demo]][mdl-slider]
 
 ```jsx
-<mdl.Slider style={styles.slider}/>
+<mdl.Slider style={styles.slider} />
 …
 const SliderWithValue = mdl.Slider.slider()
   .withStyle(styles.slider)
@@ -253,15 +269,47 @@ const SliderWithValue = mdl.Slider.slider()
 <SliderWithValue
   ref=“sliderWithValue”
   onChange={(curValue) => this.setState({curValue})}
-  />
+/>
 ```
 
 👉 [props reference][slider-props-doc] and [example code][slider-sample]
 
+### Range Slider
+![range-slider-demo]
+
+```jsx
+<mdl.RangeSlider style={styles.slider} />
+…
+const SliderWithRange = mdl.RangeSlider.slider()
+  .withStyle(styles.slider)
+  .withMin(10)
+  .withMax(100)
+  .withMinValue(30)
+  .withMaxValue(50)
+  .build();
+…
+<SliderWithRange
+  ref=“sliderWithRange”
+  onChange={(curValue) => this.setState({
+    min: curValue.min,
+    max: curValue.max,
+    })
+  }
+  onConfirm={(curValue) => {
+    console.log("Slider drag ended");
+    console.log(curValue);
+  }}
+/>
+```
+
+👉 [props reference][range-slider-props-doc] and [example code][slider-sample]
+
 [mdl-slider]: http://www.getmdl.io/components/index.html#sliders-section
 [slider-demo]: https://cloud.githubusercontent.com/assets/390805/10123318/6c502e6e-6569-11e5-924a-62c8b850511c.gif
+[range-slider-demo]: https://cloud.githubusercontent.com/assets/16245422/12763284/63a2dafc-c9a8-11e5-8fde-37b6f42a60c2.gif
 [slider-sample]: https://github.com/xinthink/rnmk-demo/blob/master/app/sliders.js
 [slider-props-doc]: http://www.xinthink.com/react-native-material-kit/docs/lib/mdl/Slider.html#props
+[range-slider-props-doc]: http://www.xinthink.com/react-native-material-kit/docs/lib/mdl/RangeSlider.html#props
 
 ### Text Fields
 
@@ -277,20 +325,20 @@ const Textfield = MKTextField.textfield()
   .build();
 
 ...
-<Textfield/>
+<Textfield />
 ```
 
 Customizing textfields through builder:
 
 ```jsx
-const ColoredTextfield = mdl.Textfield.textfield()
+const CustomTextfield = mdl.Textfield.textfield()
   .withPlaceholder(‘Text…’)
   .withStyle(styles.textfield)
   .withTintColor(MKColor.Lime)
   .withTextInputStyle({color: MKColor.Orange})
   .build();
 ...
-<CustomTexfield/>
+<CustomTextfield />
 ```
 
 the jsx equivalent:
@@ -300,7 +348,8 @@ the jsx equivalent:
   tintColor={MKColor.Lime}
   textInputStyle={{color: MKColor.Orange}}
   placeholder=“Text…”
-  style={styles.textfield}/>
+  style={styles.textfield}
+/>
 ```
 
 👉 [props reference][tf-props-doc] and [example code][tf-sample]
@@ -327,9 +376,10 @@ the jsx equivalent:
   checked={true}
   onCheckedChange={this._onIconChecked}
   onPress={this._onIconClicked}
-  >
-  <Text pointerEvents="none"
-        style={styles.toggleTextOff}>Off</Text>
+>
+  <Text
+    pointerEvents="none"
+    style={styles.toggleTextOff}>Off</Text>
   <Text state_checked={true}
         pointerEvents="none"
         style={[styles.toggleText, styles.toggleTextOn]}>On</Text>
@@ -347,12 +397,13 @@ The two `Text` tags here, similar to [State List][android-state-list] in *Androi
 #### Switch
 
 ```jsx
-<mdl.Switch style={styles.appleSwitch}
-          onColor="rgba(255,152,0,.3)"
-          thumbOnColor={MKColor.Orange}
-          rippleColor="rgba(255,152,0,.2)"
-          onPress={() => console.log('orange switch pressed')}
-          onCheckedChange={(e) => console.log('orange switch checked', e)}
+<mdl.Switch
+  style={styles.appleSwitch}
+  onColor="rgba(255,152,0,.3)"
+  thumbOnColor={MKColor.Orange}
+  rippleColor="rgba(255,152,0,.2)"
+  onPress={() => console.log('orange switch pressed')}
+  onCheckedChange={(e) => console.log('orange switch checked', e)}
 />
 ```
 
@@ -366,9 +417,9 @@ The two `Text` tags here, similar to [State List][android-state-list] in *Androi
 [![img-checkbox]][mdl-checkbox]
 
 ```jsx
-  <MKCheckbox
-    checked={true}
-  />
+<MKCheckbox
+  checked={true}
+/>
 ```
 
 You can customize the styles by changing the global theme, which affects all checkboxes across the whole app.
@@ -394,15 +445,15 @@ setTheme({checkboxStyle: {
 [![img-radio]][mdl-radio]
 
 ```jsx
-  constructor() {
-    super();
-    this.radioGroup = new MKRadioButton.Group();
-  }
-  ...
-  <MKRadioButton
-    checked={true}
-    group={this.radioGroup}
-  />
+constructor() {
+  super();
+  this.radioGroup = new MKRadioButton.Group();
+}
+...
+<MKRadioButton
+  checked={true}
+  group={this.radioGroup}
+/>
 ```
 
 You can customize the styles by changing the global theme, which affects all radio buttons across the whole app.
@@ -424,11 +475,11 @@ setTheme({radioStyle: {
 
 
 ## About
-This project began with porting [MaterialKit][], thanks [@nghialv][] for the great work!👍🖖
+This project is inspired by [MaterialKit][], thanks [@nghialv][] for the great work!👍🖖
 
-But before long, I decided to rewrite all the components in JSX, with no or limited help of native code, and the rewriting is in progress.
+But I rewrote almost all the components in JSX, with limited help of native code.
 
-And lastly, it’s the very beginning of the project, lots of work to be done, ***contributions*** are welcome!🎉🍻
+And lastly, it’s lots of work to be done, ***contributions*** are welcome!🎉🍻
 
 [@nghialv]: https://github.com/nghialv
 [MaterialKit]: https://github.com/nghialv/MaterialKit

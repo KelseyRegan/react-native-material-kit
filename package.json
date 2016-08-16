@@ -1,11 +1,12 @@
 {
   "name": "react-native-material-kit",
-  "version": "0.2.5",
+  "version": "0.3.2",
   "description": "Bringing Material Design to React Native",
   "main": "lib/index.js",
   "author": "Yingxin Wu <yingxinwu.g@gmail.com>",
   "contributors": [
-    "All Contributors (https://github.com/xinthink/react-native-material-kit/graphs/contributors)"
+    "Quentin Valmori (https://github.com/Crash--)",
+    "Alexander Price (https://github.com/alexprice91)"
   ],
   "license": "MIT",
   "keywords": [
@@ -26,10 +27,17 @@
     "url": "git://github.com/xinthink/react-native-material-kit.git"
   },
   "devDependencies": {
-    "babel-eslint": "^4.0.10",
-    "eslint": "^1.1.0",
-    "eslint-plugin-react": "^3.2.3",
+    "babel-eslint": "^6.0.2",
+    "eslint": "^2.9.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-react": "^4.3.0",
     "gulp": "^3.9.0",
     "gulp-docco": "0.0.4"
+  },
+  "dependencies": {
+    "ramda": "^0.21.0"
+  },
+  "scripts": {
+    "lint": "eslint lib"
   }
 }
