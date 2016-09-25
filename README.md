@@ -24,8 +24,17 @@ A set of UI components, in the purpose of introducing [Material Design][md] to a
 First, `cd` to your RN project directory, and install RNMK through [rnpm](https://github.com/rnpm/rnpm) . If you don't have rnpm, you can install RNMK from npm with the command `npm i -S react-native-material-kit` and link it manually (see below).
 
 ### iOS
-#### Using rnpm
-`rnpm install react-native-material-kit`
+
+* ####React Native < 0.29 (Using rnpm)
+
+  `rnpm install react-native-material-kit`
+  
+* ####React Native >= 0.29
+  `$npm install -S react-native-material-kit`
+
+  `$react-native link react-native-material-kit`
+  
+
 
 #### Manually
 1. Add `node_modules/react-native-material-kit/iOS/RCTMaterialKit.xcodeproj` to your xcode project, usually under the `Libraries` group
@@ -52,8 +61,14 @@ Now run `pod install`. This will create an Xcode workspace containing all necess
 
 ### Android
 
-#### Using rnpm
-`rnpm install react-native-material-kit`
+* ####React Native < 0.29 (Using rnpm)
+
+  `rnpm install react-native-material-kit`
+  
+* ####React Native >= 0.29
+  `$npm install -S react-native-material-kit`
+
+  `$react-native link react-native-material-kit`
 
 #### Manually
 1. JDK 7+ is required
@@ -71,7 +86,8 @@ Now run `pod install`. This will create an Xcode workspace containing all necess
   }
 
   ```
-1. Import `com.github.xinthink.rnmk.ReactMaterialKitPackage` and register it in your `MainActivity` (or equivalent):
+1. Import `com.github.xinthink.rnmk.ReactMaterialKitPackage` and register it in your `MainActivity` (or equivalent, RN >= 0.32 MainApplication.java):
+
   ```java
   @Override
   protected List<ReactPackage> getPackages() {
@@ -177,8 +193,6 @@ the jsx equivalent:
 </MKButton>
 ```
 
-> For this time, [Shadows are unavailable on Android][android-issue-shadow]
-
 👉 [props reference][button-props-doc] and [example code][buttons-sample]
 
 > Why builders? See the ‘[Builder vs. configuration object][issue-3]’ discussion.
@@ -189,7 +203,6 @@ the jsx equivalent:
 [buttons-sample]: https://github.com/xinthink/rnmk-demo/blob/master/app/buttons.js
 [issue-3]: https://github.com/xinthink/react-native-material-kit/issues/3
 [button-props-doc]: http://www.xinthink.com/react-native-material-kit/docs/lib/mdl/Button.html#props
-[android-issue-shadow]: https://facebook.github.io/react-native/docs/known-issues.html#no-support-for-shadows-on-android
 
 ### Cards
 [![img-cards]][cards-mdl]
